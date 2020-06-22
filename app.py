@@ -144,7 +144,7 @@ from os import environ
 from aiohttp import web
 
 # fanpage token
-PAGE_ACCESS_TOKEN = 'EAAsUcgK3DnYBABNt7nltdlxCpsSyd5ZCstejUqQ1ah6mwTxVjTZBLkdUL2YkXEiSBx8wKjyVQZB1wwH38hL042X4vuuwZA7y8xS5MJIoypZA2fFCW6xJyOpWzkSFGb8TU2FDapgxOzs8jeSZCTBxRAjjDW4hejKee3nGfxTBKiFPwj7TmuZA2w1UmVMpGm3jGoZD'
+PAGE_ACCESS_TOKEN = 'EAAsUcgK3DnYBAO5LqWIz7JB3u33iXqSwN3eHnTFe22Ci3cilViwPTlXIs6ZBEIeLEIiilzeeZAcZCgthaLKmFtc9FYcjjDwPuE9Fg5nZCufe6EfPsrSkq1aE2RA3PDKvGtw1vX98eW0nG7iMxNQd5wf46rQxD4fnP0j6rB149owgiskxp34Ww8rIQpFPbdsZD'
 # verify token
 VERIFY_TOKEN = '~ckubjFP-6x^yY/('
 
