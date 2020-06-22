@@ -79,65 +79,6 @@ class ScheduleCrawler():
             message.append(mess)
         return message
 
-
-
-# print('Nhập mã số sinh viên')
-# ID=input()
-# S= ScheduleCrawler(ID)
-# S.get_schedule()
-# # S.printschedule()
-# contents=S.get()
-# for content in contents:
-#     print(content,'\n======================\n')
-# #=======================================
-# import PyPDF2
-# import tabula
-# pdfFileObj = open('20192.pdf', 'rb')
-#
-# import tabula
-#
-# # Read pdf into list of DataFrame
-#
-# df = tabula.read_pdf("20192.pdf", pages='all')
-# mydata=pd.DataFrame(columns=['Mã lớp','Mã HP','Tên HP','Ghi chú','Nhóm','Đợt','Tuần','Thứ','Ngày thi','Kíp thi','SLĐK','Phòng thi'])
-#
-# for data in df:
-#     mydata = mydata.append(data, ignore_index=True)
-#
-# # for i in range(len(mydata)):
-# #     if  pd.isna(mydata.loc[i,'Mã lớp']):
-# #         mydata.loc[i,'Mã lớp']=mydata.loc[i,'Mã lớp Mã HP'].split(' ')[0]
-# #         mydata.loc[i,'Mã HP']=mydata.loc[i,'Mã lớp Mã HP'].split(' ')[1]
-# #         mydata.loc[i,'Tên HP']=mydata.loc[i,'Tên HP Ghi chú']
-# #         mydata.loc[i,'Kíp thi']=mydata.loc[i,'Kíp thi Phòng thi']
-# #     else:
-# #         mydata.loc[i,'Tên HP'] = mydata.loc[i, 'Tên HP']+mydata.loc[i,'Ghi chú']
-# #         mydata.loc[i,'Kíp thi']=mydata.loc[i,'Kíp thi']+mydata.loc[i,'Phòng thi']
-# # mydata=mydata.drop(columns=['Mã lớp Mã HP','Kíp thi Phòng thi','Tên HP Ghi chú'])
-#
-#
-# mydata.to_csv('20192.csv',encoding='utf-8-sig')
-
-
-
-
-# print(df[0].info())
-# # Read remote pdf into list of DataFrame
-# # df2 = tabula.read_pdf("20192.pdf")
-# # print(df2.info())
-
-# # convert PDF into CSV file
-# tabula.convert_into("20192.pdf", "output.csv", output_format="csv", pages='all')
-#
-# # convert all PDFs in a directory
-# tabula.convert_into_by_batch("input_directory", output_format='csv', pages='all')
-
-
-
-# closing the pdf file object
-# pdfFileObj.close()
-
-#======================================
 import json
 import aiohttp
 from os import environ
@@ -170,12 +111,13 @@ class BotControl(web.View):
                         message_text = messaging_event["message"]["text"]
 
                         ID=message_text.lower()
-                        S= ScheduleCrawler(ID)
-                        contents=S.get_schedule()
-                        # S.printschedule()
-                        # await self.send_message(content)
-                        for content in contents:
-                            self.send_message(content)
+#                         S= ScheduleCrawler(ID)
+#                         contents=S.get_schedule()
+#                         # S.printschedule()
+#                         # await self.send_message(content)
+#                         for content in contents:
+#                             self.send_message(content)
+                        self.send_message('hee')
 
 
 
