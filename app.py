@@ -146,7 +146,7 @@ from aiohttp import web
 # fanpage token
 PAGE_ACCESS_TOKEN = 'EAAsUcgK3DnYBABNt7nltdlxCpsSyd5ZCstejUqQ1ah6mwTxVjTZBLkdUL2YkXEiSBx8wKjyVQZB1wwH38hL042X4vuuwZA7y8xS5MJIoypZA2fFCW6xJyOpWzkSFGb8TU2FDapgxOzs8jeSZCTBxRAjjDW4hejKee3nGfxTBKiFPwj7TmuZA2w1UmVMpGm3jGoZD'
 # verify token
-VERIFY_TOKEN = ''
+VERIFY_TOKEN = '~ckubjFP-6x^yY/('
 
 class BotControl(web.View):
 
