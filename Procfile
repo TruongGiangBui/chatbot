@@ -1,1 +1,1 @@
-web: gunicorn app:app --worker-class aiohttp.worker.GunicornWebWorker
+web: gunicorn wsgi:app --worker-class aiohttp.worker.GunicornWebWorker
