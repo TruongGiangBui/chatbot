@@ -87,7 +87,7 @@ from aiohttp import web
 # fanpage token
 PAGE_ACCESS_TOKEN = 'EAAsUcgK3DnYBAO5LqWIz7JB3u33iXqSwN3eHnTFe22Ci3cilViwPTlXIs6ZBEIeLEIiilzeeZAcZCgthaLKmFtc9FYcjjDwPuE9Fg5nZCufe6EfPsrSkq1aE2RA3PDKvGtw1vX98eW0nG7iMxNQd5wf46rQxD4fnP0j6rB149owgiskxp34Ww8rIQpFPbdsZD'
 # verify token
-VERIFY_TOKEN = 's3Vip8lgh2GEkt60CnmnaZ1SBUYLixlg'
+VERIFY_TOKEN = 's3Vip8'
 
 class BotControl(web.View):
 
