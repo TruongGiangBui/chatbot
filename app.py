@@ -4,8 +4,7 @@ from os import environ
 from aiohttp import web
 
 PAGE_ACCESS_TOKEN = "EAAIT4LcYLQEBADqbiaHhaGm7ejzrsub3XbBROkRQVIDvd19knEMYWMadzxnUPB5TK1eDasIKGu7CDlpGUZCZCsYWQkSlkOZAimdHUlmpaKJHuNLkAZBc7v3Q5anAeeihiLjjVyemZCAA8quYF54X3JAjZCfmupAUdUIGXnY9khBysjPuo9oEEjbO80TS5fW6sZD"
-VERIFY_TOKEN = 'EAAsUcgK3DnYBAGfZAlvWYMngX0TQXzd5bCgopFid1YUamB8m4ditC3PtvTgE3rzkSl0rKUcqTNLY5VcCZApEpihiHaz1Czu3W7mbIbZA39IJLRNChCnQFDNyU5D892BDt7zqDBYK0T5ZCzuZAZBcjPpMNHYxBE28XBxKypZAuBBRe5BPnDFcFmhTvZAzn5HIqp8ZD'
-
+VERIFY_TOKEN = 'abc'
 class BotControl(web.View):
 
     async def get(self):
@@ -43,7 +42,7 @@ class BotControl(web.View):
                             await self.send_message(sender_id,
                                               "mình nghe ba mình nói nếu mình được 100 like sẽ chia sẻ với các bạn thêm tính năng mới của mình đó :3")
 
-        return web.Response(text='ok', status=200)
+        return web.Response(text='hello', status=200)
 
     async def send_greeting(self, message_text):
         params = {
