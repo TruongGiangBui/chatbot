@@ -3,7 +3,7 @@ import aiohttp
 from os import environ
 from aiohttp import web
 
-PAGE_ACCESS_TOKEN = "EAAIT4LcYLQEBADqbiaHhaGm7ejzrsub3XbBROkRQVIDvd19knEMYWMadzxnUPB5TK1eDasIKGu7CDlpGUZCZCsYWQkSlkOZAimdHUlmpaKJHuNLkAZBc7v3Q5anAeeihiLjjVyemZCAA8quYF54X3JAjZCfmupAUdUIGXnY9khBysjPuo9oEEjbO80TS5fW6sZD"
+PAGE_ACCESS_TOKEN = ""
 VERIFY_TOKEN = 'abc'
 class BotControl(web.View):
 
