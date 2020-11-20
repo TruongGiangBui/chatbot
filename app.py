@@ -14,6 +14,7 @@ global threshold
 global model
 global X
 global recent
+global trigger
 
 
 
@@ -46,6 +47,9 @@ class ChatBot(Resource):
         global model
         global X
         global recent
+        global trigger
+        trigger=1
+
         children_left = np.loadtxt("chidlren_left.csv")
         children_right = np.loadtxt("chidlren_right.csv")
         feature = np.loadtxt("feture.csv")
@@ -63,7 +67,7 @@ class ChatBot(Resource):
         recent = 0
 
         message=name_feature[int(feature[recent])]
-        return {"message":message,"Done":False}
+        return {"message":message,"id":str(0),"trigger":str(1),"end":False}
     def post(self):
         global children_left
         global children_right
@@ -77,6 +81,8 @@ class ChatBot(Resource):
         global model
         global X
         global recent
+        global trigger
+        trigger+=1
         args=chat.parse_args()
         x=args['input']
         if (x < threshold[recent]):
@@ -86,10 +92,10 @@ class ChatBot(Resource):
             recent = int(children_right[recent])
         if int(is_leaves[recent]) != 1:
             message = name_feature[int(feature[recent])]
-            return {"message": message, "Done": False}
+            return {"message": message,"id":str(trigger-1),"trigger":str(trigger), "end": False}
         else:
             a=model.predict(X.reshape(1,-1))
-            return {"message": a[0], "Done": True}
+            return {"message": a[0],"id":str(trigger-1),"trigger":str(trigger), "end": True}
 
 
 api.add_resource(ChatBot,"/chat")
