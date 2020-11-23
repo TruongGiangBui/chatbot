@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 import pickle
 
-global builded
-builded=False
+
 global recent
 recent=0
 
@@ -48,8 +47,7 @@ class ChatBot(Resource):
         name_feature = name_feature.reshape(131)
         node_depth = np.loadtxt("node_depth.csv")
         threshold = np.loadtxt("threshold.csv")
-        if int(input)==2 and builded==False:
-            builded=True
+        if int(input)==2:
             with open("dt.pickle", "rb") as file:
                 model = pickle.load(file)
 
