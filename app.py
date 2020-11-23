@@ -70,7 +70,7 @@ class ChatBot(Resource):
             return {"message":message,"end":False}
         else:
 
-            
+            threshold = np.loadtxt("threshold.csv")
             x = int(input)
             if (x < threshold[recent]):
                 recent = int(children_left[recent])
