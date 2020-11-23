@@ -4,6 +4,8 @@ import pickle
 
 global builded
 builded=False
+global recent
+recent=0
 
 
 
@@ -48,7 +50,6 @@ class ChatBot(Resource):
         threshold = np.loadtxt("threshold.csv")
         if int(input)==2 and builded==False:
             builded=True
-
             with open("dt.pickle", "rb") as file:
                 model = pickle.load(file)
 
