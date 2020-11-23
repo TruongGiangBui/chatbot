@@ -2,18 +2,6 @@ import numpy as np
 import pandas as pd
 import pickle
 
-global children_left
-global children_right
-global feature
-global is_leaves
-global name_feature1
-global name_feature
-
-global node_depth
-global threshold
-global model
-global X
-global recent
 global builded
 builded=False
 
@@ -70,7 +58,7 @@ class ChatBot(Resource):
             return {"message":message,"end":False}
         else:
 
-            
+
             x = int(input)
             if (x < threshold[recent]):
                 recent = int(children_left[recent])
