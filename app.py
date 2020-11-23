@@ -85,7 +85,7 @@ class ChatBot(Resource):
         trigger+=1
         args=chat.parse_args()
         x=args['input']
-        if (x < threshold[recent]):
+        if (int(x) < threshold[recent]):
             recent = int(children_left[recent])
         else:
             X[int(feature[recent])] = 1
