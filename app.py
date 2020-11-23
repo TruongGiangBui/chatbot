@@ -84,21 +84,7 @@ class ChatBot(Resource):
                 a = model.predict(X.reshape(1, -1))
                 return {"message": a[0], "end": True}
 
-    def post(self,input):
-        global children_left
-        global children_right
-        global feature
-        global is_leaves
-        global name_feature1
-        global name_feature
-
-        global node_depth
-        global threshold
-        global model
-        global X
-        global recent
-        global trigger
-
+   
 
 
 api.add_resource(ChatBot,"/chat/<string:input>")
