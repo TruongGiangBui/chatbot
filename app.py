@@ -14,7 +14,8 @@ global threshold
 global model
 global X
 global recent
-global trigger
+global builded
+builded=False
 
 
 
@@ -27,9 +28,7 @@ from flask_restful import Api,Resource,reqparse
 
 app=Flask(__name__)
 api=Api(app)
-chat={}
-chat=reqparse.RequestParser()
-chat.add_argument("input",type=int,help="1 or 0")
+
 
 class ChatBot(Resource):
 
@@ -47,9 +46,10 @@ class ChatBot(Resource):
         global model
         global X
         global recent
+        global builded
 
-        if int(input)==2:
-
+        if int(input)==2 and builded==False:
+            builded=True
             children_left = np.loadtxt("chidlren_left.csv")
             children_right = np.loadtxt("chidlren_right.csv")
             feature = np.loadtxt("feture.csv")
@@ -84,7 +84,7 @@ class ChatBot(Resource):
                 a = model.predict(X.reshape(1, -1))
                 return {"message": a[0], "end": True}
 
-   
+    
 
 
 api.add_resource(ChatBot,"/chat/<string:input>")
