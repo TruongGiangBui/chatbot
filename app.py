@@ -34,7 +34,7 @@ chat.add_argument("input",type=int,help="1 or 0")
 class ChatBot(Resource):
 
 
-    def get(self):
+    def get(self,input):
         global children_left
         global children_right
         global feature
@@ -68,7 +68,7 @@ class ChatBot(Resource):
 
         message=name_feature[int(feature[recent])]
         return {"message":message,"id":str(0),"trigger":str(1),"end":False}
-    def post(self):
+    def post(self,input):
         global children_left
         global children_right
         global feature
@@ -84,8 +84,8 @@ class ChatBot(Resource):
         global trigger
         trigger+=1
         args=chat.parse_args()
-        x=args['input']
-        if (int(x) < threshold[recent]):
+        x=int(input)
+        if (x < threshold[recent]):
             recent = int(children_left[recent])
         else:
             X[int(feature[recent])] = 1
@@ -98,6 +98,6 @@ class ChatBot(Resource):
             return {"message": a[0],"id":str(trigger-1),"trigger":str(trigger), "end": True}
 
 
-api.add_resource(ChatBot,"/chat")
+api.add_resource(ChatBot,"/chat/<string:input>")
 if __name__=="__main__":
     app.run(debug=True)
