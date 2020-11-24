@@ -10,60 +10,103 @@ api=Api(app)
 
 
 class Model():
-    children_left = np.loadtxt("chidlren_left.csv")
-    children_right = np.loadtxt("chidlren_right.csv")
-    feature = np.loadtxt("feture.csv")
-    is_leaves = np.loadtxt("is_leaves.csv")
-    name_feature1 = pd.read_csv("name_feature.csv")
-    name_feature = np.array(name_feature1)
-    name_feature = name_feature.reshape(1, -1)
-    name_feature = name_feature.reshape(131)
-    node_depth = np.loadtxt("node_depth.csv")
-    threshold = np.loadtxt("threshold.csv")
-
-
 
     def __init__(self):
         with open("dt.pickle", "rb") as file:
             self.model = pickle.load(file)
         self.X = np.zeros(131)
         self.recent = 0
+        self.data = pd.read_csv("pre_train_data.csv")
+        self.data = self.data.drop('Unnamed: 0', axis=1)
+        self.name_feature = list(self.data)
         self.description = pd.read_csv("symptom_Description.csv")
-        self.precaution=pd.read_csv('symptom_precaution.csv')
-    def procesing(self,input):
-        if input==2:
+        self.precaution = pd.read_csv('symptom_precaution.csv')
+        self.now = 0
+        self.decision_tree = self.model.estimators_[self.now]
+        self.visited = np.zeros(131)
+        self.n_nodes = self.decision_tree.tree_.node_count
+        self.children_left = self.decision_tree.tree_.children_left
+        self.children_right = self.decision_tree.tree_.children_right
+        self.feature = self.decision_tree.tree_.feature
+        self.threshold = self.decision_tree.tree_.threshold
+        self.node_depth = np.zeros(shape=self.n_nodes, dtype=np.int64)
+        self.is_leaves = np.zeros(shape=self.n_nodes, dtype=bool)
+        self.stack = [(0, -1)]
+        while len(self.stack) > 0:
+            node_id, parent_depth = self.stack.pop()
+            self.node_depth[node_id] = parent_depth + 1
+            if (self.children_left[node_id] != self.children_right[node_id]):
+                self.stack.append((self.children_left[node_id], parent_depth + 1))
+                self.stack.append((self.children_right[node_id], parent_depth + 1))
+            else:
+                self.is_leaves[node_id] = True
+
+    def procesing(self, input):
+        if input == 2:
             message = self.name_feature[int(self.feature[self.recent])]
             return {"message": message, "end": False}
 
-        elif input==0 or input==1:
-            x = int(input)
+        elif input == 0 or input == 1:
+            if (self.visited[int(self.feature[self.recent])] == 1):
+                x = X[self.feature[self.recent]]
+            else:
+                x = int(input)
             if (x < self.threshold[self.recent]):
                 self.recent = int(self.children_left[self.recent])
             else:
                 self.X[int(self.feature[self.recent])] = 1
                 self.recent = int(self.children_right[self.recent])
-            if int(self.is_leaves[self.recent]) != 1:
+            if int(self.is_leaves[self.recent]) != True:
                 message = self.name_feature[int(self.feature[self.recent])]
                 return {"message": message, "end": False}
             else:
-                a = self.model.predict(self.X.reshape(1, -1))
-                return {"message": a[0]+"\n"+self.getdescription(a[0])+"\n"+self.getprecaution(a[0]), "end": True}
-        else:
-                return {}
+                self.now += 1
+                if (self.now < 16):
+                    self.decision_tree = self.model.estimators_[self.now]
+                    self.recent = 0
+                    self.n_nodes = self.decision_tree.tree_.node_count
+                    self.children_left = self.decision_tree.tree_.children_left
+                    self.children_right = self.decision_tree.tree_.children_right
+                    self.feature = self.decision_tree.tree_.feature
+                    self.threshold = self.decision_tree.tree_.threshold
+                    self.node_depth = np.zeros(shape=self.n_nodes, dtype=np.int64)
+                    self.is_leaves = np.zeros(shape=self.n_nodes, dtype=bool)
+                    self.stack = [(0, -1)]
+                    while len(self.stack) > 0:
+                        node_id, parent_depth = self.stack.pop()
+                        self.node_depth[node_id] = parent_depth + 1
+                        if (self.children_left[node_id] != self.children_right[node_id]):
+                            self.stack.append((self.children_left[node_id], parent_depth + 1))
+                            self.stack.append((self.children_right[node_id], parent_depth + 1))
+                        else:
+                            self.is_leaves[node_id] = True
+                if self.now == 8:
+                    a = self.model.predict(self.X.reshape(1, -1))
+                    return {"message": a[0] + "\n" + self.getdescription(a[0]) + "\n" + self.getprecaution(a[0]),
+                            "end": False}
+                elif self.now == 16:
+                    a = self.model.predict(self.X.reshape(1, -1))
+                    return {"message": a[0] + "\n" + self.getdescription(a[0]) + "\n" + self.getprecaution(a[0]),
+                            "end": True}
+                else:
+                    return self.procesing(2)
 
-    def getdescription(self,name):
+        else:
+            return {}
+
+    def getdescription(self, name):
         for i in range(len(self.description)):
             if name in self.description['Disease'].iloc[i]:
                 return self.description['Description'].iloc[i]
         return "Not found"
 
-    def getprecaution(self,name):
+    def getprecaution(self, name):
         for i in range(len(self.precaution)):
             if name in self.precaution['Disease'].iloc[i]:
                 return (self.precaution['Precaution_1'].iloc[i] + ", "
-                      + self.precaution['Precaution_2'].iloc[i] + ", "
-                      + self.precaution['Precaution_3'].iloc[i] + ", "
-                      + self.precaution['Precaution_4'].iloc[i])
+                        + self.precaution['Precaution_2'].iloc[i] + ", "
+                        + self.precaution['Precaution_3'].iloc[i] + ", "
+                        + self.precaution['Precaution_4'].iloc[i])
         return "Not found"
 
 class ChatBot(Resource):
