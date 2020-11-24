@@ -8,7 +8,6 @@ from flask_restful import Api,Resource,reqparse
 app=Flask(__name__)
 api=Api(app)
 
-MESSAGE1= 
 
 class Model():
     children_left = np.loadtxt("chidlren_left.csv")
