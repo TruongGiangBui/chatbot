@@ -35,12 +35,7 @@ class Model():
         if input==2:
             message = self.name_feature[int(self.feature[self.recent])]
             return {"message": message, "end": False}
-        elif input==3:
-            message=self.getdescription(self.a[0])
-            return {"message": message, "end": True}
-        elif input==4:
-            message=self.getprecaution(self.a[0])
-            return {"message": message, "end": True}
+
         elif input==0 or input==1:
             x = int(input)
             if (x < self.threshold[self.recent]):
@@ -52,8 +47,8 @@ class Model():
                 message = self.name_feature[int(self.feature[self.recent])]
                 return {"message": message, "end": False}
             else:
-                self.a = self.model.predict(self.X.reshape(1, -1))
-                return {"message": self.a[0], "end": True}
+                a = self.model.predict(self.X.reshape(1, -1))
+                return {"message": a[0]+"\n"+self.getdescription(a[0])+"\n"+self.getprecaution(a[0]), "end": True}
         else:
                 return {}
 
