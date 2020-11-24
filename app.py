@@ -8,7 +8,7 @@ from flask_restful import Api,Resource,reqparse
 app=Flask(__name__)
 api=Api(app)
 
-
+global model
 class Model():
     children_left = np.loadtxt("chidlren_left.csv")
     children_right = np.loadtxt("chidlren_right.csv")
