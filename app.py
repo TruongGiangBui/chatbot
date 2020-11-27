@@ -3,7 +3,9 @@ import pandas as pd
 import pickle
 from flask import Flask
 from flask_restful import Api,Resource,reqparse
+from googletrans import Translator
 
+translator = Translator()
 
 app=Flask(__name__)
 api=Api(app)
@@ -44,6 +46,11 @@ class Model():
     def procesing(self, input):
         if input == 2:
             message = self.name_feature[int(self.feature[self.recent])]
+            try:
+                message = 'Bạn có ' + translator.translate(message.replace('_', " "), src='en',
+                                                           dest='vi').text + " không?"
+            except:
+                message = "Bạn có " + message.replace('_', " ") + " không?"
             return {"message": message, "end": False}
 
         elif input == 0 or input == 1:
@@ -58,6 +65,10 @@ class Model():
                 self.recent = int(self.children_right[self.recent])
             if int(self.is_leaves[self.recent]) != True:
                 message = self.name_feature[int(self.feature[self.recent])]
+                try:
+                    message ='Bạn có '+ translator.translate(message.replace('_', " "), src='en', dest='vi').text+" không?"
+                except:
+                    message = "Bạn có "+message.replace('_', " ")+" không?"
                 return {"message": message, "end": False}
             else:
                 self.now += 1
@@ -82,12 +93,41 @@ class Model():
                             self.is_leaves[node_id] = True
                 if self.now == 8:
                     a = self.model.predict(self.X.reshape(1, -1))
-                    return {"message": a[0] + "\n" + self.getdescription(a[0]) + "\n" + self.getprecaution(a[0]),
-                            "end": False}
+                    diseases=a[0]
+                    des=self.getdescription(a[0])
+                    precau=self.getprecaution(a[0])
+
+                    try:
+                        diseases = diseases+" / "+translator.translate(diseases.replace('_', " "), src='en', dest='vi').text
+                    except:
+                        diseases = diseases.replace('_', " ")
+                    try:
+                        des = translator.translate(des.replace('_', " "), src='en', dest='vi').text
+                        precau = translator.translate(precau.replace('_', " "), src='en', dest='vi').text
+                    except:
+                        diseases = diseases.replace('_', " ")
+                        precau=precau.replace('_', " ")
+                    message="Chẩn đoán bệnh: "+diseases+"\n Triệu chứng: "+des+"\n Cách xử lí: "+precau
+                    return {"message": message,"end": False}
                 elif self.now == 16:
                     a = self.model.predict(self.X.reshape(1, -1))
-                    return {"message": a[0] + "\n" + self.getdescription(a[0]) + "\n" + self.getprecaution(a[0]),
-                            "end": True}
+                    diseases = a[0]
+                    des = self.getdescription(a[0])
+                    precau = self.getprecaution(a[0])
+
+                    try:
+                        diseases = diseases + " / " + translator.translate(diseases.replace('_', " "), src='en',
+                                                                           dest='vi').text
+                    except:
+                        diseases = diseases.replace('_', " ")
+                    try:
+                        des = translator.translate(des.replace('_', " "), src='en', dest='vi').text
+                        precau = translator.translate(precau.replace('_', " "), src='en', dest='vi').text
+                    except:
+                        diseases = diseases.replace('_', " ")
+                        precau = precau.replace('_', " ")
+                    message = "Chẩn đoán bệnh: " + diseases + "\n Triệu chứng: " + des + "\n Cách xử lí: " + precau
+                    return {"message": message,"end": True}
                 else:
                     return self.procesing(2)
 
