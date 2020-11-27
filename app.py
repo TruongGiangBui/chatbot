@@ -54,82 +54,84 @@ class Model():
             return {"message": message, "end": False}
 
         elif input == 0 or input == 1:
-            if (self.visited[int(self.feature[self.recent])] == 1):
-                x = X[self.feature[self.recent]]
-            else:
-                x = int(input)
-            if (x < self.threshold[self.recent]):
-                self.recent = int(self.children_left[self.recent])
-            else:
+            #if (self.visited[int(self.feature[self.recent])] == 1):
+                #x = self.X[self.feature[self.recent]]
+            #else:
+                #x = int(input)
+            x = int(input)
+            if(x > self.threshold[self.recent]):
                 self.X[int(self.feature[self.recent])] = 1
-                self.recent = int(self.children_right[self.recent])
-            if int(self.is_leaves[self.recent]) != True:
-                message = self.name_feature[int(self.feature[self.recent])]
-                try:
-                    message ='Bạn có '+ translator.translate(message.replace('_', " "), src='en', dest='vi').text+" không?"
-                except:
-                    message = "Bạn có "+message.replace('_', " ")+" không?"
-                return {"message": message, "end": False}
-            else:
-                self.now += 1
-                if (self.now < 16):
-                    self.decision_tree = self.model.estimators_[self.now]
-                    self.recent = 0
-                    self.n_nodes = self.decision_tree.tree_.node_count
-                    self.children_left = self.decision_tree.tree_.children_left
-                    self.children_right = self.decision_tree.tree_.children_right
-                    self.feature = self.decision_tree.tree_.feature
-                    self.threshold = self.decision_tree.tree_.threshold
-                    self.node_depth = np.zeros(shape=self.n_nodes, dtype=np.int64)
-                    self.is_leaves = np.zeros(shape=self.n_nodes, dtype=bool)
-                    self.stack = [(0, -1)]
-                    while len(self.stack) > 0:
-                        node_id, parent_depth = self.stack.pop()
-                        self.node_depth[node_id] = parent_depth + 1
-                        if (self.children_left[node_id] != self.children_right[node_id]):
-                            self.stack.append((self.children_left[node_id], parent_depth + 1))
-                            self.stack.append((self.children_right[node_id], parent_depth + 1))
-                        else:
-                            self.is_leaves[node_id] = True
-                if self.now == 8:
-                    a = self.model.predict(self.X.reshape(1, -1))
-                    diseases=a[0]
-                    des=self.getdescription(a[0])
-                    precau=self.getprecaution(a[0])
-
-                    try:
-                        diseases = diseases+" / "+translator.translate(diseases.replace('_', " "), src='en', dest='vi').text
-                    except:
-                        diseases = diseases.replace('_', " ")
-                    try:
-                        des = translator.translate(des.replace('_', " "), src='en', dest='vi').text
-                        precau = translator.translate(precau.replace('_', " "), src='en', dest='vi').text
-                    except:
-                        diseases = diseases.replace('_', " ")
-                        precau=precau.replace('_', " ")
-                    message="Chẩn đoán bệnh: "+diseases+"\n Triệu chứng: "+des+"\n Cách xử lí: "+precau
-                    return {"message": message,"end": False}
-                elif self.now == 16:
-                    a = self.model.predict(self.X.reshape(1, -1))
-                    diseases = a[0]
-                    des = self.getdescription(a[0])
-                    precau = self.getprecaution(a[0])
-
-                    try:
-                        diseases = diseases + " / " + translator.translate(diseases.replace('_', " "), src='en',
-                                                                           dest='vi').text
-                    except:
-                        diseases = diseases.replace('_', " ")
-                    try:
-                        des = translator.translate(des.replace('_', " "), src='en', dest='vi').text
-                        precau = translator.translate(precau.replace('_', " "), src='en', dest='vi').text
-                    except:
-                        diseases = diseases.replace('_', " ")
-                        precau = precau.replace('_', " ")
-                    message = "Chẩn đoán bệnh: " + diseases + "\n Triệu chứng: " + des + "\n Cách xử lí: " + precau
-                    return {"message": message,"end": True}
+            self.visited[int(self.feature[self.recent])] = 1
+            while(self.visited[int(self.feature[self.recent])] == 1):
+                x = self.X[self.feature[self.recent]]
+                if (x < self.threshold[self.recent]):
+                    self.recent = int(self.children_left[self.recent])
                 else:
-                    return self.procesing(2)
+                    self.recent = int(self.children_right[self.recent])
+                if int(self.is_leaves[self.recent]) == True:
+                    self.now += 1
+                    if (self.now < 16):
+                        self.decision_tree = self.model.estimators_[self.now]
+                        self.recent = 0
+                        self.n_nodes = self.decision_tree.tree_.node_count
+                        self.children_left = self.decision_tree.tree_.children_left
+                        self.children_right = self.decision_tree.tree_.children_right
+                        self.feature = self.decision_tree.tree_.feature
+                        self.threshold = self.decision_tree.tree_.threshold
+                        self.node_depth = np.zeros(shape=self.n_nodes, dtype=np.int64)
+                        self.is_leaves = np.zeros(shape=self.n_nodes, dtype=bool)
+                        self.stack = [(0, -1)]
+                        while len(self.stack) > 0:
+                            node_id, parent_depth = self.stack.pop()
+                            self.node_depth[node_id] = parent_depth + 1
+                            if (self.children_left[node_id] != self.children_right[node_id]):
+                                self.stack.append((self.children_left[node_id], parent_depth + 1))
+                                self.stack.append((self.children_right[node_id], parent_depth + 1))
+                            else:
+                                self.is_leaves[node_id] = True
+                    if self.now == 8:
+                        a = self.model.predict(self.X.reshape(1, -1))
+                        diseases=a[0]
+                        des=self.getdescription(a[0])
+                        precau=self.getprecaution(a[0])
+
+                        try:
+                            diseases = diseases+" / "+translator.translate(diseases.replace('_', " "), src='en', dest='vi').text
+                        except:
+                            diseases = diseases.replace('_', " ")
+                        try:
+                            des = translator.translate(des.replace('_', " "), src='en', dest='vi').text
+                            precau = translator.translate(precau.replace('_', " "), src='en', dest='vi').text
+                        except:
+                            diseases = diseases.replace('_', " ")
+                            precau=precau.replace('_', " ")
+                        message="Chẩn đoán bệnh: "+diseases+" \n Triệu chứng: "+des+" \n Cách xử lí: "+precau
+                        return {"message": message,"end": False}
+                    elif self.now == 16:
+                        a = self.model.predict(self.X.reshape(1, -1))
+                        diseases = a[0]
+                        des = self.getdescription(a[0])
+                        precau = self.getprecaution(a[0])
+
+                        try:
+                            diseases = diseases + " / " + translator.translate(diseases.replace('_', " "), src='en',
+                                                                               dest='vi').text
+                        except:
+                            diseases = diseases.replace('_', " ")
+                        try:
+                            des = translator.translate(des.replace('_', " "), src='en', dest='vi').text
+                            precau = translator.translate(precau.replace('_', " "), src='en', dest='vi').text
+                        except:
+                            diseases = diseases.replace('_', " ")
+                            precau = precau.replace('_', " ")
+                        message = "Chẩn đoán bệnh: " + diseases + " \n Triệu chứng: " + des + " \n Cách xử lí: " + precau
+                        return {"message": message,"end": True}
+            message = self.name_feature[int(self.feature[self.recent])]
+            try:
+                message ='Bạn có '+ translator.translate(message.replace('_', " "), src='en', dest='vi').text+" không?"
+            except:
+                message = "Bạn có "+message.replace('_', " ")+" không?"
+            return {"message": message, "end": False}
 
         else:
             return {}
@@ -148,6 +150,7 @@ class Model():
                         + self.precaution['Precaution_3'].iloc[i] + ", "
                         + self.precaution['Precaution_4'].iloc[i])
         return "Not found"
+
 
 class ChatBot(Resource):
     def get(self,input):
