@@ -18,3 +18,5 @@ threadpoolctl==2.1.0
 Werkzeug==1.0.1
 gunicorn
 googletrans==3.0.0
+uvicorn==0.13.1
+fastapi==0.62.0
